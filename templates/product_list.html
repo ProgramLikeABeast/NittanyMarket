@@ -1,0 +1,43 @@
+{% extends "dashboard.html" %} {% block content %}
+<div class="card">
+  <ul class="list-group list-group-flush">
+    {% for title, product_name, lid in result %} {% set trimmedTitle =
+    title|replace("('", "")|replace("',)", "") %} {% set trimmedProduct_name =
+    product_name|replace("('", "")|replace("',)", "") %} {% set trimmedLid =
+    lid|replace("('", "")|replace("',)", "") %}
+    <li class="list-group-item">
+      <button
+        type="button"
+        class="btn bg-light btn-lg btn-block"
+        id="{{trimmedLid}}"
+        onclick="openWindowWithPost('/product', {'lid':this.id})"
+      >
+        <h2>{{trimmedTitle}}</h2>
+        <p>{{trimmedProduct_name}}</p>
+      </button>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+
+<script>
+  function openWindowWithPost(url, data) {
+    let form = document.createElement("form");
+    form.method = "POST";
+    form.target = "_self";
+    form.action = url;
+
+    for (var key in data) {
+      var input = document.createElement("input");
+      input.name = key;
+      input.value = data[key];
+      form.appendChild(input);
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+  }
+</script>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "dashboard.html" %} {% block content %}
+<div class="card">
+  <ul class="list-group list-group-flush">
+    {% for category in result %} {% set trimmedCategory = category|replace("('",
+    "")|replace("',)", "") %}
+    <li class="list-group-item">
+      <div class="row" id="{{trimmedCategory}}">
+        <div class="col-10">
+          <button
+            type="button"
+            class="btn bg-light btn-lg btn-block"
+            onclick="openWindowWithPost('/category_3', {'category':this.parentNode.parentNode.id})"
+          >
+            {{trimmedCategory}}
+          </button>
+        </div>
+        <div class="col-2">
+          <button
+            type="button"
+            class="btn btn-secondary btn-lg btn-lg"
+            onclick="openWindowWithPost('/product_list', {'category':this.parentNode.parentNode.id})"
+          >
+            Product List
+          </button>
+        </div>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+
+<script>
+  function openWindowWithPost(url, data) {
+    let form = document.createElement("form");
+    form.method = "POST";
+    form.target = "_self";
+    form.action = url;
+
+    for (var key in data) {
+      var input = document.createElement("input");
+      input.name = key;
+      input.value = data[key];
+      form.appendChild(input);
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+  }
+</script>
+
+{% endblock %}

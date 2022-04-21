@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=sd, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      h1 {
+        color: grey;
+      }
+      h3 {
+        color: black;
+      }
+      .pointer {
+        cursor: pointer;
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <div class="container pt-4">
+      <div class="row">
+        <div class="col-8">
+          <h1>Success! You are logged in!</h1>
+        </div>
+        <div class="col-4">
+          {% if isAdmin %}
+          <button id="admin" type="button" class="btn btn-primary">
+            Check Users
+          </button>
+          {% endif %}
+          <button id="back" type="button" class="btn btn-success">Back</button>
+        </div>
+      </div>
+
+      <nav class="navbar navbar-expand-lg navbar-light bg-secondary">
+        <a class="navbar-brand pointer" id="nittany-market">NittanyMarket</a>
+        <div
+          class="collapse navbar-collapse text-light"
+          id="navbarSupportedContent"
+          background-color="red"
+        >
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item pointer">
+              <a class="nav-link nav-tag" id="categories">Categories</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link nav-tag" href="#">Sellers</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link nav-tag" href="#">Local Vendors</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link nav-tag" href="#">My Orders</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link nav-tag" href="#">User Profile</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      {% block content %}{% endblock %}
+    </div>
+    <script>
+      $("#back").click(function () {
+        window.open("/", "_self");
+      });
+      $("#admin").click(function () {
+        window.open("/user", "_self");
+      });
+      $("#categories").click(function () {
+        window.open("/category", "_self");
+      });
+      $("#nittany-market").click(function () {
+        window.open("/dashboard", "_self");
+      });
+    </script>
+  </body>
+</html>

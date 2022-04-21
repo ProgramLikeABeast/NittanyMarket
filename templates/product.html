@@ -1,0 +1,24 @@
+{% extends "dashboard.html" %} {% block content %}
+<div class="card" style="width: 100%">
+  {% for
+  Seller_Email,Listing_ID,Category,Title,Product_Name,Product_Description,Price,Quantity
+  in product[0] %}
+  <div class="card-body">
+    <h1 class="display-4">{{Title}}</h3>
+    <p class="lead"><em>{{Product_Name}}</em></p>
+    <h5>{{Product_Description}}</h5>
+  </div>
+  <div class="card-body">
+    <p>Seller: <a href="#" class="card-link">{{Seller_Email}}</a></p>
+    <p>Category: <a href="#" class="card-link">{{Category}}</a></p>
+  </div>
+  {% endfor %}
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item"><p class="h4">Comments:</p></li>
+    {% for Buyer_Email, Seller_Email, Listing_ID, Review_Desc in product[1] %}
+    <li class="list-group-item">{{Review_Desc}}<footer class="blockquote-footer">{{Buyer_Email}}</footer></li>
+
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
