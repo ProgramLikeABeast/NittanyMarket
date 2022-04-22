@@ -15,6 +15,9 @@ connection.execute('DROP TABLE IF EXISTS Product_Listings')
 connection.execute('DROP TABLE IF EXISTS Orders')
 connection.execute('DROP TABLE IF EXISTS Reviews')
 connection.execute('DROP TABLE IF EXISTS Ratings')
+# extra databases
+connection.execute('DROP TABLE IF EXISTS Product_Unique')
+
 
 connection.commit()
 
@@ -109,5 +112,12 @@ connection.execute('CREATE TABLE Ratings('
                    'Rating INTEGER,'
                    'Rating_Desc STRING,'
                    'UNIQUE(Buyer_Email, Seller_Email, Date));')
+
+connection.execute('CREATE TABLE Product_Unique('
+                   'Title STRING,'
+                   'Product_Name STRING,'
+                   'Product_Description STRING,'
+                   'Listing_ID INTEGER,'
+                   'UNIQUE(Title, Product_Name, Product_Description));')
 
 connection.commit()

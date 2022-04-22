@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request
 import sqlite3 as sql
 import hashlib
+import time
 
-from Category import Category, getProductInfoFromListingId
+from Category import Category
+from aggregate import getUniqueProductInfoFromListingId, getReviewInfoFromSingleListingId
 
 app = Flask(__name__)
 
@@ -85,22 +87,20 @@ def category_4():
 
 @app.route('/product_list', methods=['POST', 'GET'])
 def product_list():
-    connection = sql.connect('database.db')
-    cursor = connection.cursor()
     if request.method == 'POST':
         category = request.form['category']
-        result = getProductInfoFromListingId(Category(category).getListingIds())
+        result = getUniqueProductInfoFromListingId(Category(category).getListingIds())
         return render_template('product_list.html', result=result)
 
 @app.route('/product', methods=['POST', 'GET'])
 def product_detail():
     connection = sql.connect('database.db')
     cursor = connection.cursor()
-    cursor2 = connection.cursor()
     if request.method == 'POST':
         lid = request.form['lid']
-        product_info = cursor.execute('SELECT DISTINCT Seller_Email,Listing_ID,Category,Title,Product_Name,Product_Description,Price,Quantity FROM Product_Listings WHERE Listing_ID=?;', (lid, ))
-        product_review = cursor2.execute('SELECT DISTINCT Buyer_Email, Seller_Email, Listing_ID, Review_Desc FROM Reviews WHERE Listing_ID=?;', (lid, ))
+        query_result = cursor.execute('SELECT DISTINCT * FROM Product_Listings WHERE Listing_ID=?;', (lid, ))
+        product_info = [row for row in query_result]
+        product_review = getReviewInfoFromSingleListingId(lid)
         return render_template('product.html', product=[product_info, product_review])
 
 def encrypt(s):

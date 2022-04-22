@@ -36,22 +36,4 @@ class Category:
                 self.product_id_list.append(row[0])
         self.product_id_list = list(set(self.product_id_list))
         return self.product_id_list
-            
-def getProductInfoFromListingId(id_list):
-    connection = sql.connect('database.db')
-    cursor = connection.cursor()
-    returnList = []
-    for id in id_list:
-        result = cursor.execute('SELECT DISTINCT Title, Product_Name, Listing_ID FROM Product_Listings WHERE Listing_ID=?;', (id, ))
-        # decompose query result
-        for row in result:
-            returnList.append(row)
-    return returnList
-    
-
-
-c = Category('Clothing')
-print(c.searchOneLayer('Clothing'))
-print(c.search_test())
-print(c.getListingIds())
-print(getProductInfoFromListingId([315, 317]))
+        
