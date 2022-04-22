@@ -16,23 +16,60 @@
         cursor: pointer;
       }
     </style>
+    <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
     <link
       rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
       crossorigin="anonymous"
     />
-    <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
     <div class="container pt-4">
       <div class="row">
+        <div class="col-1">
+          {% set isAdmin = info[0] %} {% set email = info[1] %} {% if isAdmin %}
+          <button
+            type="button"
+            class="btn btn-lg btn-danger target"
+            data-toggle="popover"
+            data-placement="bottom"
+            data-trigger="focus"
+            title="{{info[1]}}"
+            data-content="You are an admin."
+          >
+            Admin
+          </button>
+          {% else %}
+          <button
+            type="button"
+            class="btn btn-lg btn-info target"
+            data-toggle="popover"
+            data-placement="bottom"
+            data-trigger="focus"
+            title="{{info[1]}}"
+            data-content="You are an user."
+          >
+            User
+          </button>
+          {% endif %}
+        </div>
         <div class="col-8">
           <div class="alert alert-success" role="alert">
             Success! You are logged in!
           </div>
         </div>
-        <div class="col-4">
+        <div class="col-3">
           {% if isAdmin %}
           <button id="admin" type="button" class="btn btn-primary">
             Check Users
@@ -73,6 +110,9 @@
       {% block content %}{% endblock %}
     </div>
     <script>
+      $(function () {
+        $("[data-toggle=popover]").popover();
+      });
       $("#back").click(function () {
         window.open("/", "_self");
       });
@@ -81,9 +121,6 @@
       });
       $("#categories").click(function () {
         window.open("/category", "_self");
-      });
-      $("#nittany-market").click(function () {
-        window.open("/dashboard", "_self");
       });
     </script>
   </body>

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, make_response
 import sqlite3 as sql
 import hashlib
 import time
@@ -24,7 +24,9 @@ def dashboard():
         email, password = request.form['email'], request.form['password']
         # if the user is found in User Relation, go to dashboard page
         if loginVerify(email, password):
-            return render_template('dashboard.html', isAdmin=adminVerify(email, password))
+            response =  make_response(render_template('dashboard.html', info=[adminVerify(email), email]))
+            response.set_cookie('email', email)
+            return response
         # if the email password tuple doesn't exist, go to loginError page
         else:
             return render_template('loginError.html')
@@ -43,8 +45,9 @@ def category():
     connection = sql.connect('database.db')
     cursor = connection.cursor()
     if request.method == 'GET':
+        email = request.cookies.get('email')
         result = cursor.execute('SELECT DISTINCT category_name FROM Categories WHERE parent_category="Root";')
-        return render_template('./category/category.html', result=result)
+        return render_template('./category/category.html', result=result, info=[adminVerify(email), email])
     if request.method == 'POST':
         result = cursor.execute('SELECT DISTINCT category_name FROM Categories WHERE parent_category="Root";')
         return render_template('./category/category.html', result=result)
@@ -58,8 +61,9 @@ def category_2():
         return render_template('./category/category_2.html', result=result)
     if request.method == 'POST':
         category = request.form['category']
+        email = request.cookies.get('email')
         result = cursor.execute('SELECT DISTINCT category_name FROM Categories WHERE parent_category=?;', (category, ))
-        return render_template('./category/category_2.html', result=result, category=category)
+        return render_template('./category/category_2.html', result=result, info=[adminVerify(email), email])
 
 @app.route('/category_3', methods=['POST', 'GET'])
 def category_3():
@@ -70,8 +74,9 @@ def category_3():
         return render_template('./category/category_3.html', result=result)
     if request.method == 'POST':
         category = request.form['category']
+        email = request.cookies.get('email')
         result = cursor.execute('SELECT DISTINCT category_name FROM Categories WHERE parent_category=?;', (category, ))
-        return render_template('./category/category_3.html', result=result, category=category)
+        return render_template('./category/category_3.html', result=result, info=[adminVerify(email), email])
 
 @app.route('/category_4', methods=['POST', 'GET'])
 def category_4():
@@ -82,15 +87,17 @@ def category_4():
         return render_template('./category/category_4.html', result=result)
     if request.method == 'POST':
         category = request.form['category']
+        email = request.cookies.get('email')
         result = cursor.execute('SELECT DISTINCT category_name FROM Categories WHERE parent_category=?;', (category, ))
-        return render_template('./category/category_4.html', result=result, category=category)
+        return render_template('./category/category_4.html', result=result, info=[adminVerify(email), email])
 
 @app.route('/product_list', methods=['POST', 'GET'])
 def product_list():
     if request.method == 'POST':
         category = request.form['category']
+        email = request.cookies.get('email')
         result = getUniqueProductInfoFromListingId(Category(category).getListingIds())
-        return render_template('product_list.html', result=result)
+        return render_template('product_list.html', result=result, info=[adminVerify(email), email])
 
 @app.route('/product', methods=['POST', 'GET'])
 def product_detail():
@@ -98,10 +105,11 @@ def product_detail():
     cursor = connection.cursor()
     if request.method == 'POST':
         lid = request.form['lid']
+        email = request.cookies.get('email')
         query_result = cursor.execute('SELECT DISTINCT * FROM Product_Listings WHERE Listing_ID=?;', (lid, ))
         product_info = [row for row in query_result]
         product_review = getReviewInfoFromSingleListingId(lid)
-        return render_template('product.html', product=[product_info, product_review])
+        return render_template('product.html', product=[product_info, product_review], info=[adminVerify(email), email])
 
 def encrypt(s):
     hash_obj = hashlib.sha256(bytes(s, encoding='utf-8'))
@@ -119,11 +127,10 @@ def loginVerify(email, password):
     else:
         return True
 
-def adminVerify(email, passowrd):
-    e_password = encrypt(passowrd)
+def adminVerify(email):
     connection = sql.connect('database.db')
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM Admin WHERE email=? AND password=?;", (email, e_password))
+    cursor.execute("SELECT * FROM Admin WHERE email=?;", (email, ))
     row = cursor.fetchone()
     if row is None:
         return False
