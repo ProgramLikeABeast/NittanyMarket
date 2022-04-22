@@ -94,7 +94,7 @@ for i in range(product_listing_size):
     connection.execute('INSERT INTO Product_Listings'
                        '(Seller_Email, Listing_ID, Category, Title, Product_Name, Product_Description, Price, Quantity)'
                         'VALUES (?,?,?,?,?,?,?,?);',
-                        (product_listings.at[i, 'Seller_Email'], int(product_listings.at[i, 'Listing_ID']), product_listings.at[i, 'Category'], product_listings.at[i, 'Title'], product_listings.at[i, 'Product_Name'], product_listings.at[i, 'Product_Description'], product_listings.at[i, 'Price'], product_listings.at[i, 'Quantity']))
+                        (product_listings.at[i, 'Seller_Email'], int(product_listings.at[i, 'Listing_ID']), product_listings.at[i, 'Category'], product_listings.at[i, 'Title'], product_listings.at[i, 'Product_Name'], product_listings.at[i, 'Product_Description'], product_listings.at[i, 'Price'], int(product_listings.at[i, 'Quantity'])))
 
 # filling in Orders Relation
 for i in range(order_size):

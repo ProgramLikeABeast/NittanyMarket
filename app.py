@@ -2,6 +2,8 @@ from flask import Flask, render_template, request
 import sqlite3 as sql
 import hashlib
 
+from Category import Category, getProductInfoFromListingId
+
 app = Flask(__name__)
 
 host = 'http://127.0.0.1:5000/'
@@ -16,7 +18,6 @@ def admin():
 
 @app.route('/dashboard', methods=['GET','POST'])
 def dashboard():
-    error = None
     if request.method == 'POST':
         email, password = request.form['email'], request.form['password']
         # if the user is found in User Relation, go to dashboard page
@@ -41,10 +42,10 @@ def category():
     cursor = connection.cursor()
     if request.method == 'GET':
         result = cursor.execute('SELECT DISTINCT category_name FROM Categories WHERE parent_category="Root";')
-        return render_template('category.html', result=result)
+        return render_template('./category/category.html', result=result)
     if request.method == 'POST':
         result = cursor.execute('SELECT DISTINCT category_name FROM Categories WHERE parent_category="Root";')
-        return render_template('category.html', result=result)
+        return render_template('./category/category.html', result=result)
 
 @app.route('/category_2', methods=['POST', 'GET'])
 def category_2():
@@ -52,11 +53,11 @@ def category_2():
     cursor = connection.cursor()
     if request.method == 'GET':
         result = cursor.execute('SELECT DISTINCT category_name FROM Categories WHERE parent_category="Root";')
-        return render_template('category_2.html', result=result)
+        return render_template('./category/category_2.html', result=result)
     if request.method == 'POST':
         category = request.form['category']
         result = cursor.execute('SELECT DISTINCT category_name FROM Categories WHERE parent_category=?;', (category, ))
-        return render_template('category_2.html', result=result, category=category)
+        return render_template('./category/category_2.html', result=result, category=category)
 
 @app.route('/category_3', methods=['POST', 'GET'])
 def category_3():
@@ -64,11 +65,11 @@ def category_3():
     cursor = connection.cursor()
     if request.method == 'GET':
         result = cursor.execute('SELECT DISTINCT category_name FROM Categories WHERE parent_category="Root";')
-        return render_template('category_3.html', result=result)
+        return render_template('./category/category_3.html', result=result)
     if request.method == 'POST':
         category = request.form['category']
         result = cursor.execute('SELECT DISTINCT category_name FROM Categories WHERE parent_category=?;', (category, ))
-        return render_template('category_3.html', result=result, category=category)
+        return render_template('./category/category_3.html', result=result, category=category)
 
 @app.route('/category_4', methods=['POST', 'GET'])
 def category_4():
@@ -76,11 +77,11 @@ def category_4():
     cursor = connection.cursor()
     if request.method == 'GET':
         result = cursor.execute('SELECT DISTINCT category_name FROM Categories WHERE parent_category="Root";')
-        return render_template('category_4.html', result=result)
+        return render_template('./category/category_4.html', result=result)
     if request.method == 'POST':
         category = request.form['category']
         result = cursor.execute('SELECT DISTINCT category_name FROM Categories WHERE parent_category=?;', (category, ))
-        return render_template('category_4.html', result=result, category=category)
+        return render_template('./category/category_4.html', result=result, category=category)
 
 @app.route('/product_list', methods=['POST', 'GET'])
 def product_list():
@@ -88,7 +89,7 @@ def product_list():
     cursor = connection.cursor()
     if request.method == 'POST':
         category = request.form['category']
-        result = cursor.execute('SELECT DISTINCT Title, Product_Name, Listing_ID FROM Product_Listings WHERE Category=?;', (category, ))
+        result = getProductInfoFromListingId(Category(category).getListingIds())
         return render_template('product_list.html', result=result)
 
 @app.route('/product', methods=['POST', 'GET'])
@@ -128,3 +129,4 @@ def adminVerify(email, passowrd):
         return False
     else:
         return True
+
