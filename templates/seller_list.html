@@ -1,0 +1,38 @@
+{% extends "dashboard.html" %} {% block content %}
+<div class="card">
+  <ul class="list-group list-group-flush">
+    {% for seller_email in result %}
+    <li class="list-group-item">
+      <button
+        type="button"
+        class="btn bg-light btn-lg btn-block"
+        id="{{seller_email}}"
+        onclick="openWindowWithPost('/seller', {'seller_email':this.id})"
+      >
+        <h2>{{seller_email}}</h2>
+      </button>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+
+<script>
+  function openWindowWithPost(url, data) {
+    let form = document.createElement("form");
+    form.method = "POST";
+    form.target = "_self";
+    form.action = url;
+
+    for (var key in data) {
+      var input = document.createElement("input");
+      input.name = key;
+      input.value = data[key];
+      form.appendChild(input);
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+  }
+</script>
+{% endblock %}

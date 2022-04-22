@@ -29,7 +29,10 @@ def insertIntoProductUnique(infoList):
     cursor.close()
 
 def getListingIdListFromSingleListingId(lid):
-    info = getUniqueProductInfoFromListingId([lid])[0]
+    productInfo = getUniqueProductInfoFromListingId([lid])
+    if not productInfo:
+        return []
+    info = productInfo[0]
     connection = sql.connect('database.db')
     cursor = connection.cursor()
     result = cursor.execute('SELECT Listing_ID FROM Product_Listings WHERE Title=? AND Product_Name=? AND Product_Description=?;', (info[0], info[1], info[2]))
@@ -49,3 +52,23 @@ def getReviewInfoFromSingleListingId(lid):
                 retList.append(row)
     cursor.close()
     return retList
+
+def getProductsFromSellerEmail(email):
+    connection = sql.connect('database.db')
+    cursor = connection.cursor()
+    retList = []
+    result = cursor.execute('SELECT DISTINCT * FROM Product_Listings WHERE Seller_Email=?;', (email, ))
+    for row in result:
+        retList.append(row)
+    return retList
+
+def getRatingsFromSellerEmail(email):
+    connection = sql.connect('database.db')
+    cursor = connection.cursor()
+    retList = []
+    result = cursor.execute('SELECT DISTINCT * FROM Ratings WHERE Seller_Email=?;', (email, ))
+    for row in result:
+        retList.append(row)
+    cursor.close()
+    return retList
+    

@@ -4,7 +4,7 @@ import hashlib
 import time
 
 from Category import Category
-from aggregate import getUniqueProductInfoFromListingId, getReviewInfoFromSingleListingId
+from aggregate import getUniqueProductInfoFromListingId, getReviewInfoFromSingleListingId, getProductsFromSellerEmail, getRatingsFromSellerEmail
 
 app = Flask(__name__)
 
@@ -110,6 +110,24 @@ def product_detail():
         product_info = [row for row in query_result]
         product_review = getReviewInfoFromSingleListingId(lid)
         return render_template('product.html', product=[product_info, product_review], info=[adminVerify(email), email])
+
+@app.route('/seller_list', methods=['POST', 'GET'])
+def seller_list():
+    connection = sql.connect('database.db')
+    cursor = connection.cursor()
+    email = request.cookies.get('email')
+    result = []
+    query_result = cursor.execute('SELECT DISTINCT email FROM Sellers;')
+    for row in query_result:
+        result.append(row[0].replace("('", "".replace("',)", "")))
+    return render_template('seller_list.html', result=result, info=[adminVerify(email), email])
+
+@app.route('/seller', methods=['POST', 'GET'])
+def seller():
+    if request.method == 'POST':
+        seller_email = request.form['seller_email']
+        email = request.cookies.get('email')
+        return render_template('seller.html', seller_email=seller_email, info=[adminVerify(email), email], product_list=getProductsFromSellerEmail(seller_email), rating_list=getRatingsFromSellerEmail(seller_email))
 
 def encrypt(s):
     hash_obj = hashlib.sha256(bytes(s, encoding='utf-8'))

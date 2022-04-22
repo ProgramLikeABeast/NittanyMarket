@@ -1,0 +1,54 @@
+{% extends "dashboard.html" %} {% block content %}
+<div class="card" style="width: 100%">
+  <div class="card-body">
+    <h2 class="display-4">{{seller_email}}</h3>
+  </div>
+
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item"><p class="h4">Products: </p></li>
+    {% for Seller_Email,Listing_ID,Category,Title,Product_Name,Product_Description,Price,Quantity in product_list %}
+    <li class="list-group-item">
+        <button
+          type="button"
+          class="btn bg-light btn-lg btn-block"
+          id="{{Listing_ID}}"
+          onclick="openWindowWithPost('/product', {'lid':this.id})"
+        >
+          <h2>{{Title}}</h2>
+          <p>{{Product_Name}}</p>
+        </button>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item"><p class="h4">Ratingss: </p></li>
+    {% for Buyer_Email,Seller_Email,Date,Rating,Rating_Desc in rating_list %}
+    <li class="list-group-item">
+      <p>Rating:</p><img src="/open-iconic/svg/star.svg" alt="star">
+      "{{Rating_Desc}}"
+      <footer class="blockquote-footer">{{Buyer_Email}},{{Date}}</footer>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+<script>
+    function openWindowWithPost(url, data) {
+      let form = document.createElement("form");
+      form.method = "POST";
+      form.target = "_self";
+      form.action = url;
+  
+      for (var key in data) {
+        var input = document.createElement("input");
+        input.name = key;
+        input.value = data[key];
+        form.appendChild(input);
+      }
+  
+      document.body.appendChild(form);
+      form.submit();
+      document.body.removeChild(form);
+    }
+  </script>
+{% endblock %}

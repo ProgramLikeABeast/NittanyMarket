@@ -17,7 +17,7 @@ orders = pandas.read_csv('./data/Orders.csv')
 reviews = pandas.read_csv('./data/Reviews.csv')
 ratings = pandas.read_csv('./data/Ratings.csv')
 
-user_size, buyer_size, credit_card_size, address_size = 6002, 3000, 3000, 5000
+user_size, buyer_size, credit_card_size, address_size = 6003, 3000, 3000, 5000
 zipcode_size, seller_size, local_vendor_size, category_size = 5894, 1000, 100, 94
 product_listing_size, order_size, review_size, rating_size = 699, 449, 299, 350
 

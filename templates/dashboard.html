@@ -15,6 +15,12 @@
       .pointer {
         cursor: pointer;
       }
+      .avatar {
+        vertical-align: middle;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+      }
     </style>
     <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
     <script
@@ -92,16 +98,16 @@
             <li class="nav-item pointer">
               <a class="nav-link nav-tag" id="categories">Categories</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link nav-tag" href="#">Sellers</a>
+            <li class="nav-item pointer">
+              <a class="nav-link nav-tag" id="sellers">Sellers</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item pointer">
               <a class="nav-link nav-tag" href="#">Local Vendors</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item pointer">
               <a class="nav-link nav-tag" href="#">My Orders</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item pointer">
               <a class="nav-link nav-tag" href="#">User Profile</a>
             </li>
           </ul>
@@ -121,6 +127,9 @@
       });
       $("#categories").click(function () {
         window.open("/category", "_self");
+      });
+      $("#sellers").click(function () {
+        window.open("/seller_list", "_self");
       });
     </script>
   </body>
