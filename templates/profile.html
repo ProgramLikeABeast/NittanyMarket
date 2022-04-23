@@ -1,0 +1,12 @@
+{% extends "dashboard.html" %} {% block content %} {% for
+email,first_name,last_name,gender,age,home_address_id,billing_address_id in
+buyer %}
+<div class="card">
+  <div class="card-header">My NittanyMarket</div>
+  <div class="card-body">
+    <h5 class="card-title">{{first_name}} {{last_name}}</h5>
+    <p class="card-text">I am happy with online shopping!</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+</div>
+{% endfor %} {% endblock %}

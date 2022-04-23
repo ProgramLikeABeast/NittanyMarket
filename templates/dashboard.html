@@ -106,13 +106,10 @@
               <a class="nav-link nav-tag" id="sellers">Sellers</a>
             </li>
             <li class="nav-item pointer">
-              <a class="nav-link nav-tag" href="#">Local Vendors</a>
+              <a class="nav-link nav-tag" id="orders">My Orders </a>
             </li>
             <li class="nav-item pointer">
-              <a class="nav-link nav-tag" href="#">My Orders</a>
-            </li>
-            <li class="nav-item pointer">
-              <a class="nav-link nav-tag" href="#">User Profile</a>
+              <a class="nav-link nav-tag" id="profile">User Profile</a>
             </li>
           </ul>
         </div>
@@ -135,6 +132,29 @@
       $("#sellers").click(function () {
         window.open("/seller_list", "_self");
       });
+      $("#orders").click(function () {
+        window.open("/order", "_self");
+      });
+      $("#profile").click(function () {
+        window.open("/profile", "_self");
+      });
+      function openWindowWithPost(url, data) {
+        let form = document.createElement("form");
+        form.method = "POST";
+        form.target = "_self";
+        form.action = url;
+
+        for (var key in data) {
+          var input = document.createElement("input");
+          input.name = key;
+          input.value = data[key];
+          form.appendChild(input);
+        }
+
+        document.body.appendChild(form);
+        form.submit();
+        document.body.removeChild(form);
+      }
     </script>
   </body>
 </html>

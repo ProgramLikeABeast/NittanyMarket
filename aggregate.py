@@ -71,4 +71,28 @@ def getRatingsFromSellerEmail(email):
         retList.append(row)
     cursor.close()
     return retList
-    
+
+def getOrderProductInfoFromBuyerEmail(buyer_email):
+    connection = sql.connect('database.db')
+    cursor = connection.cursor()
+    retList = []
+    result = cursor.execute('SELECT DISTINCT * FROM Orders WHERE Buyer_Email=?;', (buyer_email, ))
+    for row in result:
+        combinedRow = row[:]
+        listing_id = row[2]
+        result2 = cursor.execute('SELECT DISTINCT Title,Product_Name FROM Product_Listings WHERE Listing_ID=?;', (listing_id, ))
+        for row2 in result2:
+            combinedRow += row2
+        retList.append(combinedRow)
+    cursor.close()
+    return retList
+
+def getBuyerFromEmail(buyer_email):
+    connection = sql.connect('database.db')
+    cursor = connection.cursor()
+    retList = []
+    result = cursor.execute('SELECT DISTINCT * FROM Buyers WHERE email=?;', (buyer_email, ))
+    for row in result:
+        retList.append(row)
+    cursor.close()
+    return retList

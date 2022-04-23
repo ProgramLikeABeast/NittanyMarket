@@ -4,7 +4,7 @@ import hashlib
 import time
 
 from Category import Category
-from aggregate import getUniqueProductInfoFromListingId, getReviewInfoFromSingleListingId, getProductsFromSellerEmail, getRatingsFromSellerEmail
+from aggregate import *
 
 app = Flask(__name__)
 
@@ -128,6 +128,18 @@ def seller():
         seller_email = request.form['seller_email']
         email = request.cookies.get('email')
         return render_template('seller.html', seller_email=seller_email, info=[adminVerify(email), email], product_list=getProductsFromSellerEmail(seller_email), rating_list=getRatingsFromSellerEmail(seller_email))
+
+@app.route('/order', methods=['POST', 'GET'])
+def order():
+    email = request.cookies.get('email')
+    order_and_product = getOrderProductInfoFromBuyerEmail(email)
+    return render_template('order.html', order_and_product=order_and_product, info=[adminVerify(email), email])
+
+@app.route('/profile', methods=['GET', 'POST'])
+def profile():
+    email = request.cookies.get('email')
+    buyer = getBuyerFromEmail(email)
+    return render_template('profile.html', buyer=buyer, info=[adminVerify(email), email])
 
 def encrypt(s):
     hash_obj = hashlib.sha256(bytes(s, encoding='utf-8'))

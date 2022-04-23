@@ -34,23 +34,4 @@
     {% endfor %}
   </ul>
 </div>
-<script>
-    function openWindowWithPost(url, data) {
-      let form = document.createElement("form");
-      form.method = "POST";
-      form.target = "_self";
-      form.action = url;
-  
-      for (var key in data) {
-        var input = document.createElement("input");
-        input.name = key;
-        input.value = data[key];
-        form.appendChild(input);
-      }
-  
-      document.body.appendChild(form);
-      form.submit();
-      document.body.removeChild(form);
-    }
-  </script>
 {% endblock %}
