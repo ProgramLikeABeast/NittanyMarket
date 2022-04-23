@@ -22,10 +22,12 @@
   </ul>
 
   <ul class="list-group list-group-flush">
-    <li class="list-group-item"><p class="h4">Ratingss: </p></li>
+    <li class="list-group-item"><p class="h4">Ratings: </p></li>
     {% for Buyer_Email,Seller_Email,Date,Rating,Rating_Desc in rating_list %}
     <li class="list-group-item">
-      <p>Rating:</p><img src="/open-iconic/svg/star.svg" alt="star">
+      {% for n in range(Rating) %}
+        <span class="material-icons">star</span>
+      {% endfor %}<br>
       "{{Rating_Desc}}"
       <footer class="blockquote-footer">{{Buyer_Email}},{{Date}}</footer>
     </li>
