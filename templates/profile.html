@@ -1,12 +1,39 @@
-{% extends "dashboard.html" %} {% block content %} {% for
-email,first_name,last_name,gender,age,home_address_id,billing_address_id in
-buyer %}
+{% extends "dashboard.html" %} {% block content %}
 <div class="card">
-  <div class="card-header">My NittanyMarket</div>
+  {% for
+  email,first_name,last_name,gender,age,home_address_id,billing_address_id,
+  address_id_2,zipcode,street_num,street_name,
+  zipcode_2,city,state_id,population,density,county_name,timezone in buyer %}
+  <div class="card-header" style="font-weight: 600">Personal Profile</div>
   <div class="card-body">
-    <h5 class="card-title">{{first_name}} {{last_name}}</h5>
-    <p class="card-text">I am happy with online shopping!</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
+    <h4 class="card-title">{{first_name}} {{last_name}}, Welcome!</h4>
+    <p class="card-text">gender: {{gender}}</p>
+    <p class="card-text">age: {{age}}</p>
+    <p class="card-text">
+      address: {{street_num}} {{street_name}}, {{county_name}}, {{city}},
+      {{state_id}}{{zipcode}}
+    </p>
   </div>
+  {% endfor %}
+  <div class="card-header" style="font-weight: 600">Payment Methods</div>
+  {% for
+  credit_card_num,card_code,expire_month,expire_year,card_type,Owner_email in
+  credit_card %}
+  <div class="card-body">
+    <h4 class="card-title">{{card_type}} Card</h4>
+    <h5 class="card-title"><em style="color: Gray">{{credit_card_num}}</em></h5>
+    <p class="card-text">card code: {{card_code}}</p>
+    <p class="card-text">expiration: {{expire_month}}/{{expire_year}}</p>
+  </div>
+  {% endfor %}
+  <div class="card-header" style="font-weight: 600">Seller Info</div>
+  {% for email,routing_number,account_number,balance in seller %}
+  <div class="card-body">
+    <h4 class="card-title">{{email}}</h4>
+    <p class="card-text">card routing_number: {{routing_number}}</p>
+    <p class="card-text">account_number: {{account_number}}</p>
+    <p class="card-text">balance: {{balance}}</p>
+  </div>
+  {% endfor %}
 </div>
-{% endfor %} {% endblock %}
+{% endblock %}

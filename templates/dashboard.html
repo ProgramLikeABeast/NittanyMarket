@@ -47,28 +47,76 @@
   <body>
     <div class="container pt-4">
       <div class="row">
-        <div class="col-1">
-          {% set isAdmin = info[0] %} {% set email = info[1] %} {% if isAdmin %}
+        <div class="col-2">
+          {% if info[3] %}
           <button
             type="button"
             class="btn btn-lg btn-danger target"
             data-toggle="popover"
             data-placement="bottom"
             data-trigger="focus"
-            title="{{info[1]}}"
+            title="{{info[0]}}"
             data-content="You are an admin."
           >
             Admin
           </button>
-          {% else %}
+          {% elif info[4] %}
+          <button
+            type="button"
+            class="btn btn-lg btn-warning target"
+            data-toggle="popover"
+            data-placement="bottom"
+            data-trigger="focus"
+            title="{{info[0]}}"
+            data-content="You are an local vendor."
+          >
+            Local Vendor
+          </button>
+          {% elif info[1] and not info[2] %}
+          <button
+            type="button"
+            class="btn btn-lg btn-primary target"
+            data-toggle="popover"
+            data-placement="bottom"
+            data-trigger="focus"
+            title="{{info[0]}}"
+            data-content="You are a buyer."
+          >
+            Buyer
+          </button>
+          {% elif not info[1] and info[2] %}
+          <button
+            type="button"
+            class="btn btn-lg btn-success target"
+            data-toggle="popover"
+            data-placement="bottom"
+            data-trigger="focus"
+            title="{{info[0]}}"
+            data-content="You are a seller."
+          >
+            Seller
+          </button>
+          {% elif info[1] and info[2] %}
           <button
             type="button"
             class="btn btn-lg btn-info target"
             data-toggle="popover"
             data-placement="bottom"
             data-trigger="focus"
-            title="{{info[1]}}"
-            data-content="You are an user."
+            title="{{info[0]}}"
+            data-content="You are a buyer and a seller."
+          >
+            Buyer&Seller
+          </button>
+          {% else %}
+          <button
+            type="button"
+            class="btn btn-lg btn-secondary target"
+            data-toggle="popover"
+            data-placement="bottom"
+            data-trigger="focus"
+            title="{{info[0]}}"
+            data-content="You are a user."
           >
             User
           </button>
@@ -79,7 +127,7 @@
             Success! You are logged in!
           </div>
         </div>
-        <div class="col-3">
+        <div class="col-2">
           {% if isAdmin %}
           <button id="admin" type="button" class="btn btn-primary">
             Check Users
@@ -91,7 +139,10 @@
         </div>
       </div>
 
-      <nav class="navbar navbar-expand-lg navbar-light bg-secondary">
+      <nav
+        class="navbar navbar-expand-lg navbar-light"
+        style="background-color: #e3f2fd"
+      >
         <a class="navbar-brand pointer" id="nittany-market">NittanyMarket</a>
         <div
           class="collapse navbar-collapse text-light"

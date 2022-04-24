@@ -95,4 +95,52 @@ def getBuyerFromEmail(buyer_email):
     for row in result:
         retList.append(row)
     cursor.close()
+    return retList, retList[0][5]
+
+def getSellerFromEmail(seller_email):
+    connection = sql.connect('database.db')
+    cursor = connection.cursor()
+    retList = []
+    result = cursor.execute('SELECT DISTINCT * FROM Sellers WHERE email=?;', (seller_email, ))
+    for row in result:
+        retList.append(row)
+    cursor.close()
+    return retList
+
+def getAddressFromAddressId(address_id):
+    connection = sql.connect('database.db')
+    cursor = connection.cursor()
+    retList = []
+    result = cursor.execute('SELECT DISTINCT * FROM Address WHERE address_id=?;', (address_id, ))
+    for row in result:
+        retList.append(row)
+    cursor.close()
+    return retList, retList[0][1]
+
+def getZipcodeInfoFromZipcode(zipcode):
+    connection = sql.connect('database.db')
+    cursor = connection.cursor()
+    retList = []
+    result = cursor.execute('SELECT DISTINCT * FROM Zipcode_Info WHERE zipcode=?;', (zipcode, ))
+    for row in result:
+        retList.append(row)
+    cursor.close()
+    return retList
+
+def getBuyerAddressZipcodeFromEmail(email):
+    buyer, address_id = getBuyerFromEmail(email)
+    address, zipcode = getAddressFromAddressId(address_id)
+    zipcode_info = getZipcodeInfoFromZipcode(zipcode)
+    buyer[0] += address[0]
+    buyer[0] += zipcode_info[0]
+    return buyer
+
+def getCreditCardFromEmail(email):
+    connection = sql.connect('database.db')
+    cursor = connection.cursor()
+    retList = []
+    result = cursor.execute('SELECT DISTINCT * FROM Credit_Cards WHERE Owner_email=?;', (email, ))
+    for row in result:
+        retList.append(row)
+    cursor.close()
     return retList

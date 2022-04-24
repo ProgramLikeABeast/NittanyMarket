@@ -44,7 +44,7 @@ for i in range(buyer_size):
     connection.execute('INSERT INTO Buyers'
                        '(email, first_name, last_name, gender, age, home_address_id, billing_address_id) '
                        'VALUES (?,?,?,?,?,?,?);',
-                       (buyers.at[i, 'email'], buyers.at[i, 'first_name'], buyers.at[i, 'last_name'], buyers.at[i, 'gender'], buyers.at[i, 'home_address_id'], int(buyers.at[i, 'age']), buyers.at[i, 'billing_address_id']))
+                       (buyers.at[i, 'email'], buyers.at[i, 'first_name'], buyers.at[i, 'last_name'], buyers.at[i, 'gender'], int(buyers.at[i, 'age']), buyers.at[i, 'home_address_id'], buyers.at[i, 'billing_address_id']))
 
 # filling Credit_Cards Relation
 for i in range(credit_card_size):
