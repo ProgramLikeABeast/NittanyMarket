@@ -4,11 +4,16 @@
   <div class="card-body">
     <h1 class="display-4">{{Title}}</h3>
     <p class="lead"><em>{{Product_Name}}, {{Product_Description}}</em></p>
-    <h4 style="color: #005555">{{Price}}</h4>
+    <h4 style="color: #005555"><em>{{Price}}</em></h4>
     <p>Seller: <button id="{{Seller_Email}}" onclick="openWindowWithPost('/seller', {'seller_email':this.id})" class="btn btn-outline-primary">{{Seller_Email}}</button></p>
     <p id="{{Category}}">Category: <button id="{{Category}}" onclick="openWindowWithPost('/category', {'category':this.parentNode.id})" class="btn btn-outline-info">{{Category}}</button></p>
-    <h5>{{Quantity}} in stock</h5>
-  
+    <div>
+        <h6 style="color: #001E6C;font-weight: 700; display: inline-block;">{{Quantity}}</h6>
+        <h6 style="display: inline-block;">in stock</h6>
+    </div>
+    <div id="liveAlertPlaceholder"></div>
+    <button type="button" class="btn btn-outline-dark" id="liveAlertBtn_transaction">Buy Now</button>
+    <br />
     {% endfor %}
     <ul class="list-group list-group-flush">
       <li class="list-group-item"><p class="h4">Reviews:</p></li>

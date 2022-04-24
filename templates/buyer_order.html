@@ -1,0 +1,21 @@
+{% extends "dashboard.html" %} {% block content %}
+<div class="card" style="width: 100%">
+  <div class="card-header" style="font-weight: 600; color: #006266">
+    Successful Orders
+  </div>
+  {% for
+  Transaction_ID,Seller_Email,Listing_ID,Buyer_Email,Date,Quantity,Payment,Title,Product_Name
+  in buyer_order_and_product%}
+  <div class="card-body">
+    <h5 class="card-title">
+      {{Title}}, <em style="color: Gray">{{Product_Name}}</em>
+    </h5>
+    <h6 class="card-subtitle mb-2 text-muted">{{Date}}</h6>
+    <p class="card-text">Transaction ID: {{Transaction_ID}}</p>
+    <p class="card-text">Quantity: {{Quantity}}</p>
+    <p class="card-text">Payment: ${{Payment}}.0</p>
+    <p>Seller: <a href="#" class="card-link">{{Seller_Email}}</a></p>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

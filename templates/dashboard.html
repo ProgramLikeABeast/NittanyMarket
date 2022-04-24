@@ -129,7 +129,7 @@
           </div>
         </div>
         <div class="col-2">
-          {% if isAdmin %}
+          {% if info[3] %}
           <button id="admin" type="button" class="btn btn-lg">
             Check Users
           </button>
@@ -162,9 +162,15 @@
             <li class="nav-item pointer">
               <a class="nav-link nav-tag" id="sellers">Sellers</a>
             </li>
+            {% if info[1] %}
             <li class="nav-item pointer">
-              <a class="nav-link nav-tag" id="orders">My Orders </a>
+              <a class="nav-link nav-tag" id="buyer-orders">Buyer Orders</a>
             </li>
+            {% endif %} {% if info[2] %}
+            <li class="nav-item pointer">
+              <a class="nav-link nav-tag" id="seller-orders">Seller Orders</a>
+            </li>
+            {% endif %}
             <li class="nav-item pointer">
               <a class="nav-link nav-tag" id="profile">User Profile</a>
             </li>
@@ -173,7 +179,7 @@
       </nav>
       {% block content %}{% endblock %}
     </div>
-    <script>
+    <script type="text/javascript">
       $(function () {
         $("[data-toggle=popover]").popover();
       });
@@ -189,8 +195,11 @@
       $("#sellers").click(function () {
         window.open("/seller_list", "_self");
       });
-      $("#orders").click(function () {
-        window.open("/order", "_self");
+      $("#buyer-orders").click(function () {
+        window.open("/buyer_order", "_self");
+      });
+      $("#seller-orders").click(function () {
+        window.open("/seller_order", "_self");
       });
       $("#profile").click(function () {
         window.open("/profile", "_self");
@@ -211,6 +220,41 @@
         document.body.appendChild(form);
         form.submit();
         document.body.removeChild(form);
+      }
+      var alertPlaceholder = document.getElementById("liveAlertPlaceholder");
+      var alertTrigger_profile = document.getElementById(
+        "liveAlertBtn_profile"
+      );
+      var alertTrigger_transaction = document.getElementById(
+        "liveAlertBtn_transaction"
+      );
+
+      function alert(message, type) {
+        var wrapper = document.createElement("div");
+        wrapper.innerHTML =
+          '<div class="alert alert-' +
+          type +
+          ' alert-dismissible" role="alert">' +
+          message;
+        alertPlaceholder.append(wrapper);
+      }
+
+      if (alertTrigger_profile) {
+        alertTrigger_profile.addEventListener("click", function () {
+          alert(
+            "Your application to change your status has been submitted!",
+            "info"
+          );
+        });
+      }
+
+      if (alertTrigger_transaction) {
+        alertTrigger_transaction.addEventListener("click", function () {
+          alert(
+            "Your order has been submitted to the seller to be confirmed!",
+            "warning"
+          );
+        });
       }
     </script>
   </body>

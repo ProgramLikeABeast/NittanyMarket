@@ -1,6 +1,6 @@
 {% extends "dashboard.html" %} {% block content %}
 <div class="card">
-  {% if isBuyer %} {% for
+  {% if info[1] %} {% for
   email,first_name,last_name,gender,age,home_address_id,billing_address_id,
   address_id_2,zipcode,street_num,street_name,
   zipcode_2,city,state_id,population,density,county_name,timezone in buyer %}
@@ -29,7 +29,7 @@
     <p class="card-text">card code: {{card_code}}</p>
     <p class="card-text">expiration: {{expire_month}}/{{expire_year}}</p>
   </div>
-  {% endfor %} {% endif %} {% if isSeller %}
+  {% endfor %} {% endif %} {% if info[2] %}
   <div class="card-header" style="font-weight: 600; color: #006266">
     Seller Info
   </div>
@@ -40,7 +40,7 @@
     <p class="card-text">account_number: {{account_number}}</p>
     <p class="card-text">balance: {{balance}}</p>
   </div>
-  {% endfor %} {% endif%} {% if isLocalVendor %}
+  {% endfor %} {% endif%} {% if info[4] %}
   <div class="card-header" style="font-weight: 600; color: #006266">
     My Vendor Info
   </div>
@@ -56,19 +56,11 @@
       business address: {{street_num}} {{street_name}}, {{county_name}},
       {{city}}, {{state_id}}{{zipcode}}
     </p>
-    <div class="row">
-      <div class="col-2">
-        <button type="button" class="btn btn-warning">
-          Apply to be a Seller!
-        </button>
-      </div>
-      <div class="col-10">
-        <div class="alert alert-info" role="alert">
-          Once click, an application to change your status to a seller will be
-          submitted.
-        </div>
-      </div>
-    </div>
+    <br />
+    <div id="liveAlertPlaceholder"></div>
+    <button type="button" class="btn btn-warning" id="liveAlertBtn_profile">
+      Apply to be a Seller
+    </button>
     {% endfor %}
   </div>
   {% endif %}

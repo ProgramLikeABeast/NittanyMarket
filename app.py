@@ -31,7 +31,7 @@ def dashboard():
         else:
             return render_template('loginError.html')
     if request.method == 'GET':
-        return render_template('loginError.html')
+        return render_template('login_error.html')
 
 @app.route('/user', methods=['POST', 'GET'])
 def user():
@@ -146,28 +146,31 @@ def seller():
         email = request.cookies.get('email')
         return render_template('seller.html', seller_email=seller_email, info=infoPackUp(email), product_list=getProductsFromSellerEmail(seller_email), rating_list=getRatingsFromSellerEmail(seller_email))
 
-@app.route('/order', methods=['POST', 'GET'])
-def order():
+@app.route('/buyer_order', methods=['POST', 'GET'])
+def buyer_order():
     email = request.cookies.get('email')
-    order_and_product = getOrderProductInfoFromBuyerEmail(email)
-    return render_template('order.html', order_and_product=order_and_product, info=infoPackUp(email))
+    buyer_order_and_product = getOrderProductInfoFromBuyerEmail(email)
+    return render_template('buyer_order.html', buyer_order_and_product=buyer_order_and_product, info=infoPackUp(email))
+
+@app.route('/seller_order', methods=['GET', 'POST'])
+def seller_order():
+    email = request.cookies.get('email')
+    seller_order_and_product = getOrderProductInfoFromSellerEmail(email)
+    return render_template('seller_order.html', seller_order_and_product=seller_order_and_product, info=infoPackUp(email))
 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
     email = request.cookies.get('email')
     buyer, seller, local_vendor, address = [], [], [], []
-    is_buyer = isBuyer(email)
-    if is_buyer:
+    if isBuyer(email):
         buyer = getBuyerAddressZipcodeFromEmail(email)
-    is_seller = isSeller(email)
-    if is_seller:
+    if isSeller(email):
         seller = getSellerFromEmail(email)
-    is_local_vendor = isLocalVendor(email)
-    if is_local_vendor:
+    if isLocalVendor(email):
         local_vendor = getLocalVendorFromEmail(email)
         address = getAddressZipcodeFromAddressId(local_vendor[0][2])
     credit_card = getCreditCardFromEmail(email)
-    return render_template('profile.html', isBuyer=is_buyer, buyer=buyer, isSeller=is_seller, seller=seller, isLocalVendor=is_local_vendor, local_vendor=local_vendor, address=address, credit_card=credit_card, info=infoPackUp(email))
+    return render_template('profile.html', buyer=buyer, seller=seller, local_vendor=local_vendor, address=address, credit_card=credit_card, info=infoPackUp(email))
 
 def encrypt(s):
     hash_obj = hashlib.sha256(bytes(s, encoding='utf-8'))
