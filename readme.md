@@ -7,15 +7,15 @@ initialize database and create tables
 python dbCreation.py
 ```
 inject artificial data into the tables
-```
+```python
 python dbPopulation.py
 ```
 ### 2. Put Up Server(for window users)
 activate venv environment
-```
+```bash
 venv\Scripts\activate
 ```
 start flask server
-```
-run flask
+```bash
+flask run
 ```
