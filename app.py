@@ -49,8 +49,10 @@ def category():
         result = cursor.execute('SELECT DISTINCT category_name FROM Categories WHERE parent_category="Root";')
         return render_template('./category/category.html', result=result, info=infoPackUp(email))
     if request.method == 'POST':
-        result = cursor.execute('SELECT DISTINCT category_name FROM Categories WHERE parent_category="Root";')
-        return render_template('./category/category.html', result=result)
+        email = request.cookies.get('email')
+        category = request.form['category']
+        result = cursor.execute('SELECT DISTINCT category_name FROM Categories WHERE parent_category=?;', (category, ))
+        return render_template('./category/category.html', result=result, info=infoPackUp(email))
 
 @app.route('/category_2', methods=['POST', 'GET'])
 def category_2():
@@ -109,7 +111,22 @@ def product_detail():
         query_result = cursor.execute('SELECT DISTINCT * FROM Product_Listings WHERE Listing_ID=?;', (lid, ))
         product_info = [row for row in query_result]
         product_review = getReviewInfoFromSingleListingId(lid)
-        return render_template('product.html', product=[product_info, product_review], info=infoPackUp(email))
+        seller = getSellerFromListingId(lid)
+        return render_template('product.html', product_info=product_info, seller=seller, product_review=product_review
+        , info=infoPackUp(email))
+
+@app.route('/transaction', methods=['POST', 'GET'])
+def product_transaction():
+    connection = sql.connect('database.db')
+    cursor = connection.cursor()
+    if request.method == 'POST':
+        lid = request.form['lid']
+        email = request.cookies.get('email')
+        query_result = cursor.execute('SELECT DISTINCT * FROM Product_Listings WHERE Listing_ID=?;', (lid, ))
+        product_info = [row for row in query_result]
+        product_review = getReviewFromListingId(lid)
+        return render_template('product_transaction.html', product_info=product_info, product_review=product_review
+        , info=infoPackUp(email))
 
 @app.route('/seller_list', methods=['POST', 'GET'])
 def seller_list():
@@ -138,14 +155,19 @@ def order():
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
     email = request.cookies.get('email')
-    buyer, seller = [], []
-    if isBuyer(email):
+    buyer, seller, local_vendor, address = [], [], [], []
+    is_buyer = isBuyer(email)
+    if is_buyer:
         buyer = getBuyerAddressZipcodeFromEmail(email)
-    if isSeller(email):
+    is_seller = isSeller(email)
+    if is_seller:
         seller = getSellerFromEmail(email)
+    is_local_vendor = isLocalVendor(email)
+    if is_local_vendor:
+        local_vendor = getLocalVendorFromEmail(email)
+        address = getAddressZipcodeFromAddressId(local_vendor[0][2])
     credit_card = getCreditCardFromEmail(email)
-    return render_template('profile.html', buyer=buyer, seller=seller, credit_card=credit_card, info=infoPackUp(email))
-
+    return render_template('profile.html', isBuyer=is_buyer, buyer=buyer, isSeller=is_seller, seller=seller, isLocalVendor=is_local_vendor, local_vendor=local_vendor, address=address, credit_card=credit_card, info=infoPackUp(email))
 
 def encrypt(s):
     hash_obj = hashlib.sha256(bytes(s, encoding='utf-8'))

@@ -1,10 +1,12 @@
 {% extends "dashboard.html" %} {% block content %}
 <div class="card">
-  {% for
+  {% if isBuyer %} {% for
   email,first_name,last_name,gender,age,home_address_id,billing_address_id,
   address_id_2,zipcode,street_num,street_name,
   zipcode_2,city,state_id,population,density,county_name,timezone in buyer %}
-  <div class="card-header" style="font-weight: 600">Personal Profile</div>
+  <div class="card-header" style="font-weight: 600; color: #006266">
+    Personal Profile
+  </div>
   <div class="card-body">
     <h4 class="card-title">{{first_name}} {{last_name}}, Welcome!</h4>
     <p class="card-text">gender: {{gender}}</p>
@@ -15,7 +17,9 @@
     </p>
   </div>
   {% endfor %}
-  <div class="card-header" style="font-weight: 600">Payment Methods</div>
+  <div class="card-header" style="font-weight: 600; color: #006266">
+    Payment Methods
+  </div>
   {% for
   credit_card_num,card_code,expire_month,expire_year,card_type,Owner_email in
   credit_card %}
@@ -25,8 +29,10 @@
     <p class="card-text">card code: {{card_code}}</p>
     <p class="card-text">expiration: {{expire_month}}/{{expire_year}}</p>
   </div>
-  {% endfor %}
-  <div class="card-header" style="font-weight: 600">Seller Info</div>
+  {% endfor %} {% endif %} {% if isSeller %}
+  <div class="card-header" style="font-weight: 600; color: #006266">
+    Seller Info
+  </div>
   {% for email,routing_number,account_number,balance in seller %}
   <div class="card-body">
     <h4 class="card-title">{{email}}</h4>
@@ -34,6 +40,37 @@
     <p class="card-text">account_number: {{account_number}}</p>
     <p class="card-text">balance: {{balance}}</p>
   </div>
-  {% endfor %}
+  {% endfor %} {% endif%} {% if isLocalVendor %}
+  <div class="card-header" style="font-weight: 600; color: #006266">
+    My Vendor Info
+  </div>
+  <div class="card-body">
+    {% for Email,Business_Name,Business_Address_ID,Customer_Service_Number in
+    local_vendor %}
+    <h4 class="card-title">{{Business_Name}}</h4>
+    <p class="card-text">custom service number: {{Customer_Service_Number}}</p>
+    {% endfor %} {% for address_id_,zipcode,street_num,street_name,
+    zipcode_2,city,state_id,population,density,county_name,timezone in address
+    %}
+    <p class="card-text">
+      business address: {{street_num}} {{street_name}}, {{county_name}},
+      {{city}}, {{state_id}}{{zipcode}}
+    </p>
+    <div class="row">
+      <div class="col-2">
+        <button type="button" class="btn btn-warning">
+          Apply to be a Seller!
+        </button>
+      </div>
+      <div class="col-10">
+        <div class="alert alert-info" role="alert">
+          Once click, an application to change your status to a seller will be
+          submitted.
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
 </div>
 {% endblock %}

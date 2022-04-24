@@ -51,7 +51,7 @@
           {% if info[3] %}
           <button
             type="button"
-            class="btn btn-lg btn-danger target"
+            class="btn btn-lg btn-outline-danger target"
             data-toggle="popover"
             data-placement="bottom"
             data-trigger="focus"
@@ -63,7 +63,7 @@
           {% elif info[4] %}
           <button
             type="button"
-            class="btn btn-lg btn-warning target"
+            class="btn btn-lg btn-outline-warning target"
             data-toggle="popover"
             data-placement="bottom"
             data-trigger="focus"
@@ -75,7 +75,7 @@
           {% elif info[1] and not info[2] %}
           <button
             type="button"
-            class="btn btn-lg btn-primary target"
+            class="btn btn-lg btn-outline-primary target"
             data-toggle="popover"
             data-placement="bottom"
             data-trigger="focus"
@@ -87,7 +87,7 @@
           {% elif not info[1] and info[2] %}
           <button
             type="button"
-            class="btn btn-lg btn-success target"
+            class="btn btn-lg btn-outline-success target"
             data-toggle="popover"
             data-placement="bottom"
             data-trigger="focus"
@@ -99,7 +99,7 @@
           {% elif info[1] and info[2] %}
           <button
             type="button"
-            class="btn btn-lg btn-info target"
+            class="btn btn-lg btn-outline-info target"
             data-toggle="popover"
             data-placement="bottom"
             data-trigger="focus"
@@ -111,11 +111,12 @@
           {% else %}
           <button
             type="button"
-            class="btn btn-lg btn-secondary target"
+            class="btn btn-lg target"
             data-toggle="popover"
             data-placement="bottom"
             data-trigger="focus"
             title="{{info[0]}}"
+            style="color: #78938a"
             data-content="You are a user."
           >
             User
@@ -129,11 +130,16 @@
         </div>
         <div class="col-2">
           {% if isAdmin %}
-          <button id="admin" type="button" class="btn btn-primary">
+          <button id="admin" type="button" class="btn btn-lg">
             Check Users
           </button>
           {% endif %}
-          <button id="back" type="button" class="btn btn-success">
+          <button
+            id="back"
+            type="button"
+            class="btn btn-lg"
+            style="color: #f55353"
+          >
             Log Out
           </button>
         </div>

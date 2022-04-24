@@ -7,7 +7,7 @@ def getUniqueProductInfoFromListingId(id_list):
     connection.commit()
     tempList = []
     for id in id_list:
-        result = cursor.execute('SELECT DISTINCT Title, Product_Name, Product_Description, Listing_ID FROM Product_Listings WHERE Listing_ID=?;', (id, ))
+        result = cursor.execute('SELECT DISTINCT Title, Product_Name, Product_Description, Listing_ID FROM Product_Listings WHERE Listing_ID=? AND Quantity>0;', (id, ))
         # decompose query result
         for row in result:
            tempList.append(row)
@@ -80,7 +80,7 @@ def getOrderProductInfoFromBuyerEmail(buyer_email):
     for row in result:
         combinedRow = row[:]
         listing_id = row[2]
-        result2 = cursor.execute('SELECT DISTINCT Title,Product_Name FROM Product_Listings WHERE Listing_ID=?;', (listing_id, ))
+        result2 = cursor.execute('SELECT DISTINCT Title, Product_Name FROM Product_Listings WHERE Listing_ID=?;', (listing_id, ))
         for row2 in result2:
             combinedRow += row2
         retList.append(combinedRow)
@@ -127,6 +127,12 @@ def getZipcodeInfoFromZipcode(zipcode):
     cursor.close()
     return retList
 
+def getAddressZipcodeFromAddressId(aid):
+    address, zipcode = getAddressFromAddressId(aid)
+    zipcode_info = getZipcodeInfoFromZipcode(zipcode)
+    address[0] += zipcode_info[0]
+    return address
+
 def getBuyerAddressZipcodeFromEmail(email):
     buyer, address_id = getBuyerFromEmail(email)
     address, zipcode = getAddressFromAddressId(address_id)
@@ -140,6 +146,47 @@ def getCreditCardFromEmail(email):
     cursor = connection.cursor()
     retList = []
     result = cursor.execute('SELECT DISTINCT * FROM Credit_Cards WHERE Owner_email=?;', (email, ))
+    for row in result:
+        retList.append(row)
+    cursor.close()
+    return retList
+
+def getProductInfoFromListingId(lid):
+    connection = sql.connect('database.db')
+    cursor = connection.cursor()
+    retList = []
+    result = cursor.execute('SELECT DISTINCT Title,Product_Name,Product_Description FROM Product_Listings WHERE Listing_ID=?;', (lid, ))
+    for row in result:
+        retList.append(row)
+    cursor.close()
+    return retList
+
+def getSellerFromListingId(lid):
+    connection = sql.connect('database.db')
+    cursor = connection.cursor()
+    title, productName, productDescription = getProductInfoFromListingId(lid)[0]
+    retList = []
+    result = cursor.execute('SELECT Seller_Email, Price, Quantity, Listing_ID FROM Product_Listings WHERE Title=? AND Product_Name=? AND Product_Description=? AND Quantity>0;', (title, productName, productDescription, ))
+    for row in result:
+        retList.append(row)
+    cursor.close()
+    return retList
+
+def getReviewFromListingId(lid):
+    connection = sql.connect('database.db')
+    cursor = connection.cursor()
+    retList = []
+    result = cursor.execute('SELECT Buyer_Email, Review_Desc FROM Reviews WHERE Listing_ID=?;', (lid, ))
+    for row in result:
+        retList.append(row)
+    cursor.close()
+    return retList
+
+def getLocalVendorFromEmail(email):
+    connection = sql.connect('database.db')
+    cursor = connection.cursor()
+    retList = []
+    result = cursor.execute('SELECT * FROM Local_Vendors WHERE Email=?;', (email, ))
     for row in result:
         retList.append(row)
     cursor.close()

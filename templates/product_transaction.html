@@ -1,0 +1,24 @@
+{% extends "dashboard.html" %} {% block content %}
+<div class="card" style="width: 100%">
+  {% for Seller_Email,Listing_ID,Category,Title,Product_Name,Product_Description,Price,Quantity in product_info %}
+  <div class="card-body">
+    <h1 class="display-4">{{Title}}</h3>
+    <p class="lead"><em>{{Product_Name}}, {{Product_Description}}</em></p>
+    <h4 style="color: #005555">{{Price}}</h4>
+    <p>Seller: <button id="{{Seller_Email}}" onclick="openWindowWithPost('/seller', {'seller_email':this.id})" class="btn btn-outline-primary">{{Seller_Email}}</button></p>
+    <p id="{{Category}}">Category: <button id="{{Category}}" onclick="openWindowWithPost('/category', {'category':this.parentNode.id})" class="btn btn-outline-info">{{Category}}</button></p>
+    <h5>{{Quantity}} in stock</h5>
+  
+    {% endfor %}
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item"><p class="h4">Reviews:</p></li>
+      {% for Buyer_Email, Review_Desc in product_review %}
+      <li class="list-group-item">
+        "{{Review_Desc}}"
+        <footer class="blockquote-footer">{{Buyer_Email}}</footer>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}
