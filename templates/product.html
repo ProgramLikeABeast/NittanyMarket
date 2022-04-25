@@ -6,29 +6,33 @@
       <p class="lead"><em>{{Product_Name}}, {{Product_Description}}</em></p>
     <p>Category: <a href="#" class="card-link">{{Category}}</a></p>
   {% endfor %}
+  <div class="card-header" style="font-weight: 600; color: #006266">
+    Available Sellers
+  </div>
   <ul class="list-group list-group-flush">
-    <li class="list-group-item"><p class="h4">Available Sellers:</p></li>
     {% for Seller_Email, Price, Quantity, Listing_ID in seller %}
     <li class="list-group-item"">
       <div class="row">
-      <div class="col-1"></div>
-      <div class="col-10">
-        <button
-          type="button"
-          class="btn bg-light btn-lg btn-block"
-          id="{{Listing_ID}}"
-          onclick="openWindowWithPost('/transaction', {'lid':this.id})"
-        >
-          <em style="color: #005555; font-weight:700;">{{Price}}</em> {{Seller_Email}}
-        </button>
+        <div class="col-1"></div>
+          <div class="col-10">
+            <button
+              type="button"
+              class="btn bg-light btn-lg btn-block"
+              id="{{Listing_ID}}"
+              onclick="openWindowWithPost('/transaction', {'lid':this.id})"
+            >
+              <em style="color: #005555; font-weight:700;">{{Price}}</em> {{Seller_Email}}
+            </button>
+          </div>
+        <div class="col-1"></div>
       </div>
-      <div class="col-1"></div>
-    </div>
-    </li>
+    </li> 
     {% endfor %}
   </ul>
+  <div class="card-header" style="font-weight: 600; color: #006266">
+    Reviews
+  </div>
   <ul class="list-group list-group-flush">
-    <li class="list-group-item"><p class="h4">Reviews:</p></li>
     {% for Buyer_Email, Seller_Email, Listing_ID, Review_Desc in product_review %}
     <li class="list-group-item">
       "{{Review_Desc}}"

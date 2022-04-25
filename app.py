@@ -128,6 +128,36 @@ def product_transaction():
         return render_template('product_transaction.html', product_info=product_info, product_review=product_review
         , info=infoPackUp(email))
 
+@app.route('/message', methods=['POST', 'GET'])
+def message():
+    time.sleep(2)
+    email = request.cookies.get('email')
+    quantity = int(request.form['quantity'])
+    connection = sql.connect('database.db')
+    cursor = connection.cursor()
+    if quantity > 0:
+        lid = request.form['lid']
+        seller_email = request.form['seller_email']
+        price = int(request.form['price'].replace("$", ""))
+        createPendingOrder(email, seller_email, lid, quantity, price)
+    # buyer cancels order/seller refuses the order
+    elif quantity == -2 or quantity == -3:
+        tid = request.form['tid']
+        cursor.execute('DELETE FROM Pending_Orders WHERE Transaction_ID=?', (tid, ))
+    # seller refuses order
+    elif quantity == -4:
+        tid = request.form['tid']
+        result = cursor.execute('SELECT * FROM Pending_Orders WHERE Transaction_ID=?', (tid, ))
+        for row in result:
+            cursor.execute('INSERT INTO Orders(Transaction_ID,Seller_Email,Listing_ID,Buyer_Email,Date,Quantity,Payment) VALUES(?,?,?,?,?,?,?);', (row[0], row[1], row[2], row[3], row[4], row[5], row[6], ))
+            cursor.execute('UPDATE Product_Listings SET Quantity = Quantity-? WHERE Listing_ID=?', (row[5], row[2], ))
+            cursor.execute('UPDATE Sellers SET balance = balance + ? WHERE email=?', (row[6], row[1], ))
+        cursor.execute('DELETE FROM Pending_Orders WHERE Transaction_ID=?', (tid, ))
+
+    connection.commit()
+    cursor.close()
+    return render_template('message.html', quantity=quantity, info=infoPackUp(email))
+
 @app.route('/seller_list', methods=['POST', 'GET'])
 def seller_list():
     connection = sql.connect('database.db')
@@ -150,13 +180,15 @@ def seller():
 def buyer_order():
     email = request.cookies.get('email')
     buyer_order_and_product = getOrderProductInfoFromBuyerEmail(email)
-    return render_template('buyer_order.html', buyer_order_and_product=buyer_order_and_product, info=infoPackUp(email))
+    pending_buyer_order_and_product = getPendingOrderProductInfoFromBuyerEmail(email)
+    return render_template('buyer_order.html', buyer_order_and_product=buyer_order_and_product, pending_buyer_order_and_product=pending_buyer_order_and_product, info=infoPackUp(email))
 
 @app.route('/seller_order', methods=['GET', 'POST'])
 def seller_order():
     email = request.cookies.get('email')
     seller_order_and_product = getOrderProductInfoFromSellerEmail(email)
-    return render_template('seller_order.html', seller_order_and_product=seller_order_and_product, info=infoPackUp(email))
+    pending_seller_order_and_product = getPendingOrderProductInfoFromSellerEmail(email)
+    return render_template('seller_order.html', seller_order_and_product=seller_order_and_product, pending_seller_order_and_product=pending_seller_order_and_product, info=infoPackUp(email))
 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():

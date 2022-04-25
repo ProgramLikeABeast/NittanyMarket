@@ -101,7 +101,7 @@ for i in range(order_size):
     connection.execute('INSERT INTO Orders'
                        '(Transaction_ID, Seller_Email, Listing_ID, Buyer_Email, Date, Quantity, Payment)' 
                         'VALUES (?,?,?,?,?,?,?);',
-                        (int(orders.at[i, 'Transaction_ID']), orders.at[i, 'Seller_Email'], int(orders.at[i, 'Listing_ID']), orders.at[i, 'Buyer_Email'], orders.at[i, 'Date'], int(orders.at[i, 'Quantity']), int(orders.at[i, 'Payment'])))
+                        (str(orders.at[i, 'Transaction_ID']), orders.at[i, 'Seller_Email'], int(orders.at[i, 'Listing_ID']), orders.at[i, 'Buyer_Email'], orders.at[i, 'Date'], int(orders.at[i, 'Quantity']), int(orders.at[i, 'Payment'])))
 
 # filling in Reviews Relation
 for i in range(review_size):

@@ -1,0 +1,59 @@
+{% extends "dashboard.html" %} {% block content %} {% if quantity > 0 %}
+<div class="alert alert-success" role="alert">
+  <h4 class="alert-heading">Your Order has been placed.</h4>
+  <p>
+    The seller will receive the pending order, confirm and ship your staff.<br />
+    If you are not satisfied with the product, feel free to revoke the order!
+  </p>
+  <hr />
+  <p class="mb-0">
+    You can now check out your Buyer's Order tab to keep up the order status.
+  </p>
+</div>
+{% elif quantity == -1 %}
+<div class="alert alert-success" role="alert">
+  <h4 class="alert-heading">
+    Your application to change your status has been submitted!
+  </h4>
+  <p>
+    The admin will receive the application, upon approval you will be a
+    seller.<br />
+    If you are not approved, feel free to apply again!
+  </p>
+  <hr />
+  <p class="mb-0">
+    You can now check out your Seller's Order tab to check out the status.
+  </p>
+</div>
+{% elif quantity == -2 %}
+<div class="alert alert-warning" role="alert">
+  <h4 class="alert-heading">Your order has been cancelled.</h4>
+  <p>
+    The seller will no longer see the order information<br />
+    Feel free to buy again!
+  </p>
+  <hr />
+  <p class="mb-0">You can now check out your Buyer's Order tab to check out.</p>
+</div>
+{% elif quantity == -3 %}
+<div class="alert alert-warning" role="alert">
+  <h4 class="alert-heading">You refused buyer's order</h4>
+  <p>You no longer see the order information<br /></p>
+  <hr />
+  <p class="mb-0">
+    You can now check out your Seller's Order tab to check out.
+  </p>
+</div>
+{% elif quantity == -4 %}
+<div class="alert alert-success" role="alert">
+  <h4 class="alert-heading">Your have confirmed the order.</h4>
+  <p>
+    The order is successful and the buyer will be notified.<br />
+    Transaction amount is incremented to your account.
+  </p>
+  <hr />
+  <p class="mb-0">
+    You can now check out your Seller's Order tab to check out.
+  </p>
+</div>
+{% endif %}{% endblock %}

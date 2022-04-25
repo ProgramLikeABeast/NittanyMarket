@@ -17,6 +17,8 @@ connection.execute('DROP TABLE IF EXISTS Reviews')
 connection.execute('DROP TABLE IF EXISTS Ratings')
 # extra databases
 connection.execute('DROP TABLE IF EXISTS Product_Unique')
+connection.execute('DROP TABLE IF EXISTS Pending_Order')
+connection.execute('DROP TABLE IF EXISTS Pending_Orders')
 
 
 connection.commit()
@@ -90,7 +92,7 @@ connection.execute('CREATE TABLE Product_Listings('
 # 'UNIQUE(Seller_Email, Listing_ID));')
 
 connection.execute('CREATE TABLE Orders('
-                   'Transaction_ID INTEGER UNIQUE,'
+                   'Transaction_ID STRING UNIQUE,'
                    'Seller_Email STRING,'
                    'Listing_ID INTEGER,'
                    'Buyer_Email STRING,'
@@ -119,5 +121,14 @@ connection.execute('CREATE TABLE Product_Unique('
                    'Product_Description STRING,'
                    'Listing_ID INTEGER,'
                    'UNIQUE(Title, Product_Name, Product_Description));')
+
+connection.execute('CREATE TABLE Pending_Orders('
+                   'Transaction_ID STRING PRIMARY KEY,'
+                   'Seller_Email STRING,'
+                   'Listing_ID INTEGER,'
+                   'Buyer_Email STRING,'
+                   'Date DATE,'
+                   'Quantity INTEGER,'
+                   'Payment INTEGER);')
 
 connection.commit()

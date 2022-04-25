@@ -58,7 +58,12 @@
     </p>
     <br />
     <div id="liveAlertPlaceholder"></div>
-    <button type="button" class="btn btn-warning" id="liveAlertBtn_profile">
+    <button
+      type="button"
+      class="btn btn-warning"
+      id="liveAlertBtn_profile"
+      onclick="openWindowWithPost('message', {'quantity': '-1'})"
+    >
       Apply to be a Seller
     </button>
     {% endfor %}

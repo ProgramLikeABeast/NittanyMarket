@@ -1,4 +1,7 @@
 import sqlite3 as sql
+from datetime import date
+import hashlib
+import time
 
 def getUniqueProductInfoFromListingId(id_list):
     connection = sql.connect('database.db')
@@ -72,18 +75,54 @@ def getRatingsFromSellerEmail(email):
     cursor.close()
     return retList
 
+def getPendingOrderProductInfoFromBuyerEmail(buyer_email):
+    connection = sql.connect('database.db')
+    cursor = connection.cursor()
+    retList = []
+    tempList = []
+    result = cursor.execute('SELECT DISTINCT * FROM Pending_Orders WHERE Buyer_Email=?;', (buyer_email, ))
+    for row in result:
+        tempList.append(row)
+    for row in tempList:
+        listing_id = row[2]
+        result2 = cursor.execute('SELECT DISTINCT Title, Product_Name FROM Product_Listings WHERE Listing_ID=?;', (listing_id, ))
+        for row2 in result2:
+            row += row2
+        retList.append(row)
+    cursor.close()
+    return retList
+
 def getOrderProductInfoFromBuyerEmail(buyer_email):
     connection = sql.connect('database.db')
     cursor = connection.cursor()
     retList = []
+    tempList = []
     result = cursor.execute('SELECT DISTINCT * FROM Orders WHERE Buyer_Email=?;', (buyer_email, ))
     for row in result:
-        combinedRow = row[:]
+        tempList.append(row)
+    for row in tempList:
         listing_id = row[2]
         result2 = cursor.execute('SELECT DISTINCT Title, Product_Name FROM Product_Listings WHERE Listing_ID=?;', (listing_id, ))
         for row2 in result2:
-            combinedRow += row2
-        retList.append(combinedRow)
+            row += row2
+        retList.append(row)
+    cursor.close()
+    return retList
+
+def getPendingOrderProductInfoFromSellerEmail(seller_email):
+    connection = sql.connect('database.db')
+    cursor = connection.cursor()
+    retList = []
+    tempList = []
+    result = cursor.execute('SELECT DISTINCT * FROM Pending_Orders WHERE Seller_Email=?;', (seller_email, ))
+    for row in result:
+        tempList.append(row)
+    for row in tempList:
+        listing_id = row[2]
+        result2 = cursor.execute('SELECT DISTINCT Title, Product_Name FROM Product_Listings WHERE Listing_ID=?;', (listing_id, ))
+        for row2 in result2:
+            row += row2
+        retList.append(row)
     cursor.close()
     return retList
 
@@ -91,14 +130,16 @@ def getOrderProductInfoFromSellerEmail(seller_email):
     connection = sql.connect('database.db')
     cursor = connection.cursor()
     retList = []
+    tempList = []
     result = cursor.execute('SELECT DISTINCT * FROM Orders WHERE Seller_Email=?;', (seller_email, ))
     for row in result:
-        combinedRow = row[:]
+        tempList.append(row)
+    for row in tempList:
         listing_id = row[2]
         result2 = cursor.execute('SELECT DISTINCT Title, Product_Name FROM Product_Listings WHERE Listing_ID=?;', (listing_id, ))
         for row2 in result2:
-            combinedRow += row2
-        retList.append(combinedRow)
+            row += row2
+        retList.append(row)
     cursor.close()
     return retList
 
@@ -206,3 +247,19 @@ def getLocalVendorFromEmail(email):
         retList.append(row)
     cursor.close()
     return retList
+
+def encrypt(s):
+    hash_obj = hashlib.sha256(bytes(s, encoding='utf-8'))
+    hex_result = hash_obj.hexdigest()
+    return hex_result
+
+def createPendingOrder(email, seller_email, lid, quantity, price):
+    connection = sql.connect('database.db')
+    cursor = connection.cursor()
+    cursor.execute('INSERT INTO Pending_Orders'
+                   '(Transaction_ID, Seller_Email, Listing_ID, Buyer_Email, Date, Quantity, Payment)' 
+                   'VALUES (?,?,?,?,?,?,?);',
+                    (encrypt(str(time.time())), seller_email, lid, email, date.today().strftime("%m/%d/%y"), quantity, quantity*price))
+    connection.commit()
+    cursor.close()
+    

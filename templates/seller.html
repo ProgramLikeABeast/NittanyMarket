@@ -3,9 +3,10 @@
   <div class="card-body">
     <h2 class="display-4">{{seller_email}}</h3>
   </div>
-
+  <div class="card-header" style="font-weight: 600; color: #006266">
+    Products
+  </div>
   <ul class="list-group list-group-flush">
-    <li class="list-group-item"><p class="h4">Products: </p></li>
     {% for Seller_Email,Listing_ID,Category,Title,Product_Name,Product_Description,Price,Quantity in product_list %}
     <li class="list-group-item">
         <button
@@ -21,8 +22,10 @@
     {% endfor %}
   </ul>
 
+  <div class="card-header" style="font-weight: 600; color: #006266">
+    Ratings
+  </div>
   <ul class="list-group list-group-flush">
-    <li class="list-group-item"><p class="h4">Ratings: </p></li>
     {% for Buyer_Email,Seller_Email,Date,Rating,Rating_Desc in rating_list %}
     <li class="list-group-item">
       {% for n in range(Rating) %}

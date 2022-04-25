@@ -228,6 +228,12 @@
       var alertTrigger_transaction = document.getElementById(
         "liveAlertBtn_transaction"
       );
+      var alertTrigger_cancel = document.getElementById("liveAlertBtn_cancel");
+
+      var alertTrigger_refuse = document.getElementById("liveAlertBtn_refuse");
+      var alertTrigger_confirm = document.getElementById(
+        "liveAlertBtn_confirm"
+      );
 
       function alert(message, type) {
         var wrapper = document.createElement("div");
@@ -241,19 +247,31 @@
 
       if (alertTrigger_profile) {
         alertTrigger_profile.addEventListener("click", function () {
-          alert(
-            "Your application to change your status has been submitted!",
-            "info"
-          );
+          alert("Hang tight, system processing...", "info");
         });
       }
 
       if (alertTrigger_transaction) {
         alertTrigger_transaction.addEventListener("click", function () {
-          alert(
-            "Your order has been submitted to the seller to be confirmed!",
-            "warning"
-          );
+          alert("Hang tight, system processing...", "warning");
+        });
+      }
+
+      if (alertTrigger_cancel) {
+        alertTrigger_cancel.addEventListener("click", function () {
+          alert("Hang tight, system processing...", "warning");
+        });
+      }
+
+      if (alertTrigger_refuse) {
+        alertTrigger_refuse.addEventListener("click", function () {
+          alert("Hang tight, system processing...", "warning");
+        });
+      }
+
+      if (alertTrigger_confirm) {
+        alertTrigger_confirm.addEventListener("click", function () {
+          alert("Hang tight, system processing...", "warning");
         });
       }
     </script>

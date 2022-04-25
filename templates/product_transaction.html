@@ -5,18 +5,50 @@
     <h1 class="display-4">{{Title}}</h3>
     <p class="lead"><em>{{Product_Name}}, {{Product_Description}}</em></p>
     <h4 style="color: #005555"><em>{{Price}}</em></h4>
-    <p>Seller: <button id="{{Seller_Email}}" onclick="openWindowWithPost('/seller', {'seller_email':this.id})" class="btn btn-outline-primary">{{Seller_Email}}</button></p>
-    <p id="{{Category}}">Category: <button id="{{Category}}" onclick="openWindowWithPost('/category', {'category':this.parentNode.id})" class="btn btn-outline-info">{{Category}}</button></p>
+    <p>Seller: 
+      <button id="{{Seller_Email}}" onclick="openWindowWithPost('/seller', {'seller_email':this.id})" class="btn btn-outline-primary">
+        {{Seller_Email}}
+      </button>
+    </p>
+    <p id="{{Category}}">Category: 
+      <button id="{{Category}}" onclick="openWindowWithPost('/category', {'category':this.parentNode.id})" class="btn btn-outline-info">
+        {{Category}}
+      </button>
+    </p>
     <div>
         <h6 style="color: #001E6C;font-weight: 700; display: inline-block;">{{Quantity}}</h6>
         <h6 style="display: inline-block;">in stock</h6>
     </div>
+    {% if info[1] %}
+    <hr style="border-top: 3px dotted #bbb;">
     <div id="liveAlertPlaceholder"></div>
-    <button type="button" class="btn btn-outline-dark" id="liveAlertBtn_transaction">Buy Now</button>
+    <form action="/message", method="POST">
+      <!--extra information for the transaction form submission-->
+      <input type="hidden" id="lid" name="lid" value="{{Listing_ID}}">
+      <input type="hidden" id="seller_email" name="seller_email" value="{{Seller_Email}}">
+      <input type="hidden" id="price" name="price" value="{{Price}}">
+
+      <div class="form-row align-items-center">
+        <div class="col-auto my-1">
+          <label class="mr-sm-2" for="inlineFormCustomSelect">Quantity: </label>
+          <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="quantity">
+            {% for i in range(1, Quantity+1) %}
+              <option value="{{i}}">{{i}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-auto my-1">
+          <button type="submit" class="btn btn-outline-dark" id="liveAlertBtn_transaction">Buy Now</button>
+        </div>
+      </div>
+    </form>
+    {% endif %}
     <br />
-    {% endfor %}
+  {% endfor %}
+    <div class="card-header" style="font-weight: 600; color: #006266">
+      Reviews
+    </div>
     <ul class="list-group list-group-flush">
-      <li class="list-group-item"><p class="h4">Reviews:</p></li>
       {% for Buyer_Email, Review_Desc in product_review %}
       <li class="list-group-item">
         "{{Review_Desc}}"

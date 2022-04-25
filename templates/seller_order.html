@@ -16,6 +16,50 @@
     <p class="card-text">Payment: ${{Payment}}.0</p>
     <p>Buyer: <a href="#" class="card-link">{{Buyer_Email}}</a></p>
   </div>
+  <hr />
+  {% endfor %}
+</div>
+<div class="card" style="width: 100%">
+  <div class="card-header" style="font-weight: 600; color: #006266">
+    Pending Orders
+  </div>
+  {% for
+  Transaction_ID,Seller_Email,Listing_ID,Buyer_Email,Date,Quantity,Payment,Title,Product_Name
+  in pending_seller_order_and_product%}
+  <div class="card-body">
+    <h5 class="card-title">
+      {{Title}}, <em style="color: Gray">{{Product_Name}}</em>
+    </h5>
+    <h6 class="card-subtitle mb-2 text-muted">{{Date}}</h6>
+    <p class="card-text">Transaction ID: {{Transaction_ID}}</p>
+    <p class="card-text">Quantity: {{Quantity}}</p>
+    <p class="card-text">Payment: ${{Payment}}.0</p>
+    <p>Buyer: <a href="#" class="card-link">{{Buyer_Email}}</a></p>
+    <div id="liveAlertPlaceholder"></div>
+    <form action="/message" , method="POST" style="display: inline-block">
+      <input type="hidden" id="quantity" name="quantity" value="-3" />
+      <input type="hidden" id="tid" name="tid" value="{{Transaction_ID}}" />
+      <button
+        type="submit"
+        class="btn btn-outline-danger"
+        id="liveAlertBtn_refuse"
+      >
+        Refuse
+      </button>
+    </form>
+    <form action="/message" , method="POST" style="display: inline-block">
+      <input type="hidden" id="quantity" name="quantity" value="-4" />
+      <input type="hidden" id="tid" name="tid" value="{{Transaction_ID}}" />
+      <button
+        type="submit"
+        class="btn btn-outline-primary"
+        id="liveAlertBtn_confirm"
+      >
+        Confirm
+      </button>
+    </form>
+  </div>
+  <hr />
   {% endfor %}
 </div>
 {% endblock %}
