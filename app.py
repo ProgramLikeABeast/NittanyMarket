@@ -138,7 +138,7 @@ def message():
     if quantity > 0:
         lid = request.form['lid']
         seller_email = request.form['seller_email']
-        price = int(request.form['price'].replace("$", ""))
+        price = int(request.form['price'].replace("$", "").replace(",", ""))
         createPendingOrder(email, seller_email, lid, quantity, price)
     # buyer cancels order/seller refuses the order
     elif quantity == -2 or quantity == -3:
