@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=sd, initial-scale=1.0" />
-    <title>Document</title>
+    <title>NittanyMarket</title>
     <style>
       h1 {
         color: grey;
@@ -170,6 +170,11 @@
             <li class="nav-item pointer">
               <a class="nav-link nav-tag" id="seller-orders">Seller Orders</a>
             </li>
+            <li class="nav-item pointer">
+              <a class="nav-link nav-tag" id="publish-product"
+                >Publish a Product</a
+              >
+            </li>
             {% endif %}
             <li class="nav-item pointer">
               <a class="nav-link nav-tag" id="profile">User Profile</a>
@@ -200,6 +205,9 @@
       });
       $("#seller-orders").click(function () {
         window.open("/seller_order", "_self");
+      });
+      $("#publish-product").click(function () {
+        window.open("/publish", "_self");
       });
       $("#profile").click(function () {
         window.open("/profile", "_self");
@@ -233,6 +241,9 @@
       var alertTrigger_refuse = document.getElementById("liveAlertBtn_refuse");
       var alertTrigger_confirm = document.getElementById(
         "liveAlertBtn_confirm"
+      );
+      var alertTrigger_publish = document.getElementById(
+        "liveAlertBtn_publish"
       );
 
       function alert(message, type) {
@@ -271,6 +282,12 @@
 
       if (alertTrigger_confirm) {
         alertTrigger_confirm.addEventListener("click", function () {
+          alert("Hang tight, system processing...", "warning");
+        });
+      }
+
+      if (alertTrigger_publish) {
+        alertTrigger_publish.addEventListener("click", function () {
           alert("Hang tight, system processing...", "warning");
         });
       }

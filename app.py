@@ -153,7 +153,15 @@ def message():
             cursor.execute('UPDATE Product_Listings SET Quantity = Quantity-? WHERE Listing_ID=?', (row[5], row[2], ))
             cursor.execute('UPDATE Sellers SET balance = balance + ? WHERE email=?', (row[6], row[1], ))
         cursor.execute('DELETE FROM Pending_Orders WHERE Transaction_ID=?', (tid, ))
-
+    elif quantity == -5:
+        lid = encrypt(str(time.time()))
+        Category, Title, Product_Name, Product_Description, Price, Quantity, Active_Until = request.form['category'], request.form['title'], request.form['name'], request.form['description'], '$'+request.form['price'], int(request.form['number']), request.form['active_until']
+        if not isCategory(Category):
+            connection.commit()
+            cursor.close()
+            return render_template('message.html', quantity=-6, info=infoPackUp(email))
+        cursor.execute('INSERT INTO Product_Listings (Seller_Email,Listing_ID,Category,Title,Product_Name,Product_Description,Price,Quantity) VALUES(?,?,?,?,?,?,?,?);', (email, lid, Category, Title, Product_Name, Product_Description, Price, Quantity))
+        cursor.execute('INSERT INTO Active (Listing_ID, Active_Until) VALUES(?,?);', (lid, Active_Until))
     connection.commit()
     cursor.close()
     return render_template('message.html', quantity=quantity, info=infoPackUp(email))
@@ -203,6 +211,11 @@ def profile():
         address = getAddressZipcodeFromAddressId(local_vendor[0][2])
     credit_card = getCreditCardFromEmail(email)
     return render_template('profile.html', buyer=buyer, seller=seller, local_vendor=local_vendor, address=address, credit_card=credit_card, info=infoPackUp(email))
+
+@app.route('/publish', methods=['GET', 'POST'])
+def publish():
+    email = request.cookies.get('email')
+    return render_template('publish_product.html', info=infoPackUp(email))
 
 def encrypt(s):
     hash_obj = hashlib.sha256(bytes(s, encoding='utf-8'))
@@ -262,6 +275,16 @@ def isLocalVendor(email):
     connection = sql.connect('database.db')
     cursor = connection.cursor()
     cursor.execute("SELECT * FROM Local_Vendors WHERE email=?;", (email, ))
+    row = cursor.fetchone()
+    if row is None:
+        return False
+    else:
+        return True
+
+def isCategory(category):
+    connection = sql.connect('database.db')
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM Categories WHERE parent_category=? OR category_name=?;", (category,category ))
     row = cursor.fetchone()
     if row is None:
         return False

@@ -56,4 +56,17 @@
     You can now check out your Seller's Order tab to check out.
   </p>
 </div>
+{% elif quantity == -5 %}
+<div class="alert alert-success" role="alert">
+  <h4 class="alert-heading">Your have published the new product.</h4>
+  <p>
+    The publishing is successful and the buyer will be notified.<br />
+    You can now check out your Seller's Order tab to check out.
+  </p>
+</div>
+{% elif quantity == -6 %}
+<div class="alert alert-danger" role="alert">
+  <h4 class="alert-heading">Publish failed, category does not exist.</h4>
+  <p>The publishing failed because the category is not in the system.<br /></p>
+</div>
 {% endif %}{% endblock %}

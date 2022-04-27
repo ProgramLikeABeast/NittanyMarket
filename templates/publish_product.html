@@ -1,0 +1,48 @@
+{% extends "dashboard.html" %} {% block content %}
+<div class="card">
+  <form action="/message" method="POST">
+    <input
+      type="hidden"
+      name="seller_email"
+      id="seller_email"
+      value="{{email}}"
+    />
+    <input type="hidden" name="quantity" id="quantity" value="-5" />
+    <div class="form-group">
+      <label for="title">Product Title</label>
+      <input class="form-control" id="title" name="title" />
+    </div>
+    <div class="form-group">
+      <label for="name">Product Name</label>
+      <input class="form-control" id="name" name="name" />
+    </div>
+    <div class="form-group">
+      <label for="description">Product Description</label>
+      <input class="form-control" id="description" name="description" />
+    </div>
+    <div class="form-group">
+      <label for="number">Quantity</label>
+      <input class="form-control" id="number" name="number" />
+    </div>
+    <div class="form-group">
+      <label for="price">Price</label>
+      <input class="form-control" id="price" name="price" />
+    </div>
+    <div class="form-group">
+      <label for="active_until">Active Until</label>
+      <input class="form-control" id="active_until" name="active_until" />
+    </div>
+    <div class="form-group">
+      <label for="category">Category</label>
+      <input class="form-control" id="category" name="category" />
+      <small id="emailHelp" class="form-text text-muted"
+        >Please input an existing category.</small
+      >
+    </div>
+    <div id="liveAlertPlaceholder"></div>
+    <button type="submit" class="btn btn-primary" id="liveAlertBtn_publish">
+      Submit
+    </button>
+  </form>
+</div>
+{% endblock %}
